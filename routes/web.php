@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\AdvertisementController;
+use App\Http\Controllers\VipController;
+use App\Http\Controllers\VipPackageController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Front\AuthController;
@@ -60,38 +62,39 @@ Route::group(['prefix' => 'dashboard', 'as' => 'ad.'], function () {
 
 
 Route::group(['prefix' => LaravelLocalization::setLocale() . '/ad', 'as' => 'ad.', 'middleware' => ['auth.admin:admin', 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath']], function () {
-Route::get('/dashboard', function () {
-    $stats = [
-        'banks' => Bank::count(),
-        'categories' => Category::count(),
-        'games' => Game::count(),
-        'orders' => Order::count(),
-        'providers' => Provider::count(),
-        'users' => User::count(),
-        'admins' => Admin::count(),
-        'total_user_balance' => User::sum('user_balance'),
-    ];
+    Route::get('/dashboard', function () {
+        $stats = [
+            'banks' => Bank::count(),
+            'categories' => Category::count(),
+            'games' => Game::count(),
+            'orders' => Order::count(),
+            'providers' => Provider::count(),
+            'users' => User::count(),
+            'admins' => Admin::count(),
+            'total_user_balance' => User::sum('user_balance'),
+            'vip_subscriptions' => \App\Models\Vip::where('is_active', true)->count(), 
+        ];
 
-    // جلب عدد الطلبات خلال آخر 7 أيام
-    $orderStats = Order::select(
+        // جلب عدد الطلبات خلال آخر 7 أيام
+        $orderStats = Order::select(
             DB::raw("DATE(created_at) as date"),
             DB::raw("COUNT(*) as total")
         )
-        ->where('created_at', '>=', Carbon::now()->subDays(6)->startOfDay())
-        ->groupBy('date')
-        ->orderBy('date')
-        ->get();
+            ->where('created_at', '>=', Carbon::now()->subDays(6)->startOfDay())
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
 
-    // تجهيز البيانات للفيو
-    $chartLabels = $orderStats->pluck('date')->map(function($date) {
-        return Carbon::parse($date)->format('Y-m-d');
-    });
-    $chartData = $orderStats->pluck('total');
+        // تجهيز البيانات للفيو
+        $chartLabels = $orderStats->pluck('date')->map(function ($date) {
+            return Carbon::parse($date)->format('Y-m-d');
+        });
+        $chartData = $orderStats->pluck('total');
 
-    return view('admin.index', compact('stats', 'chartLabels', 'chartData'));
-})->name('index');
-    
-            Route::get('/finance', [FinanceController::class, 'index'])->name('finance.index');
+        return view('admin.index', compact('stats', 'chartLabels', 'chartData'));
+    })->name('index');
+
+    Route::get('/finance', [FinanceController::class, 'index'])->name('finance.index');
 
 
     // Update controller from ProviderController to CurdGamesController
@@ -140,6 +143,8 @@ Route::get('/dashboard', function () {
     Route::get('/settings/general', [SettingController::class, 'general'])->name('settings.general');
     Route::resource('settings', SettingController::class)->only(['store']);
     Route::get('/advertisements', [AdvertisementController::class, 'index'])->name('advertisements');
+    Route::get('/vip', [VipController::class, 'index'])->name('vip');
+    Route::get('/vip/add-game', [VipController::class, 'addGame'])->name('vip.addGame');
 
     //profile routes
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -155,6 +160,18 @@ Route::get('/dashboard', function () {
     Route::resource('countries', CountryController::class);
     //cities
     Route::resource('cities', CityController::class);
+
+    Route::prefix('vip-packages')->name('vip-packages.')->middleware('auth')->group(function () {
+        Route::get('/', [VipPackageController::class, 'index'])->name('index');
+        Route::get('/create', [VipPackageController::class, 'create'])->name('create');
+        Route::post('/store', [VipPackageController::class, 'store'])->name('store');
+        Route::get('/edit/{vipPackage}', [VipPackageController::class, 'edit'])->name('edit');
+        Route::put('/update/{vipPackage}', [VipPackageController::class, 'update'])->name('update');
+        Route::delete('/delete/{vipPackage}', [VipPackageController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::get('admin/vip', [VipController::class, 'userPackages'])->name('vip.packages');
+
 
 });
 
@@ -208,8 +225,9 @@ Route::group(
         Route::get('/transactions/{type?}', [TransactionController::class, 'index'])->name('front.transactions')->middleware('auth');
         Route::get('/orders/{type?}', [FrontOrderController::class, 'index'])->name('front.orders')->middleware('auth');
 
-        /********** Providers *************/
-
+        /********** vip *************/
+        Route::get('/vip', [VipController::class, 'front'])->name('front.vip');
+        Route::post('/vip/store', [VipController::class, 'store'])->name('vips.store');
     }
 );
 

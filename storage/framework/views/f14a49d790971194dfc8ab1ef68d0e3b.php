@@ -449,6 +449,28 @@ unset($__errorArgs, $__bag); ?>
         </form>
         <div class="row mt-3">
             <?php if(auth()->guard()->check()): ?>
+            <?php if((auth()->user()->vip == null || auth()->user()->vip == false )): ?>
+                <?php if(auth()->user()->isVipActive()): ?>
+                    <button type="submit" 
+                        class="btn btn-primary btn-block checkout w-50 m-auto"
+                        id="submit"
+                        onclick="this.disabled=true;document.getElementById('neworder').submit()" disabled>
+                        <?php echo e(__('translation.add')); ?>
+
+                    </button>
+                <?php else: ?>
+                <span class="text-center mb-2 bg-danger text-white p-2">لست مشترك في قسم VIP....</span>
+                <!-- زر فتح المودال -->
+                <button type="button"
+                    class="btn btn-primary btn-block checkout w-50 m-auto"
+                    data-bs-toggle="modal"
+                    data-bs-target="#confirmModal"
+                    id="submit">
+                    اضافة اشتراك VIP
+                </button>
+                <?php endif; ?>
+            <?php else: ?>
+            vip
                 <button type="submit" 
                         class="btn btn-primary btn-block checkout w-50 m-auto"
                         id="submit"
@@ -457,8 +479,49 @@ unset($__errorArgs, $__bag); ?>
 
                 </button>
             <?php endif; ?>
+            <?php endif; ?>
         </div>
     </div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <form action="<?php echo e(route('vips.store')); ?>" method="POST" id="vipForm">
+        <?php echo csrf_field(); ?>
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmModalLabel">اشتراك في قسم VIP</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+        </div>
+
+        <div class="modal-body">
+          <p>اختر باقة الاشتراك المناسبة:</p>
+
+          <div class="mb-3">
+            <label for="package" class="form-label">الباقة</label>
+            <select name="package_id" class="form-select" required>
+              <option value="">اختر الباقة</option>
+              <?php $__currentLoopData = $vipPackages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $package): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($package->id); ?>">
+                  <?php echo e($package->title); ?> (<?php echo e($package->price); ?> $ / <?php echo e($package->duration_days); ?> يوم)
+                </option>
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+          <button type="submit" class="btn btn-primary">تأكيد الاشتراك</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('script'); ?>

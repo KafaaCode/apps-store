@@ -11,6 +11,7 @@ use App\Models\Package;
 use App\Models\User;
 use App\Models\Provider;
 use App\Models\Level;
+use App\Models\VipPackage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -48,7 +49,7 @@ class GameController extends Controller
     {
         $category = Category::findOrFail($category);
         $allGames = Game::IsShow()->get();
-        $games = $allGames->where('category_id',$category->id);
+        $games = $allGames->where('category_id', $category->id);
         // dd($category);
         return view('front.games', compact('category', 'games'));
     }
@@ -63,10 +64,11 @@ class GameController extends Controller
         }
 
         $game = Game::with('packages')->IsShow()->where('slug', $slug)->firstOrFail();
-
+        $vipPackages = VipPackage::all();
 
         return view('front.games.show')->with([
             'game' => $game,
+            'vipPackages' => $vipPackages
         ]);
     }
     public function Order(OrderGameRequest $request)
@@ -112,19 +114,19 @@ class GameController extends Controller
             // check if game is from provider
             if ($game->provider_id) {
                 $provider = Provider::where('id', $game->provider_id)->first();
-            
+
                 $method = $provider->name;
                 if (method_exists(ProvidersController::class, $method)) {
                     $resault = ProvidersController::$method($game, $request, $provider->api_key);
-            
+
                     if ($resault['success']) {
                         $providerId = $provider->id;
-            
+
                         if ($method == 'soud' || $method == 'yassen') {
                             $orderId = $resault['res']->json('data.order_id');
                             $sprice = $resault['res']->json('data.price');
                         }
-            
+
                         Log::info("تم تنفيذ الطلب بنجاح", [
                             'game_id' => $game->id,
                             'provider' => $method,

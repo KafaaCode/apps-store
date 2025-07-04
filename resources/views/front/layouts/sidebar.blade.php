@@ -14,9 +14,14 @@
                         <span key="t-index">@lang('translation.index')</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{route('front.vip')}}" class="waves-effect">
+                        <i class="fas fa-crown"></i>
+                        <span key="t-index">VIP</span>
+                    </a>
+                </li>
 
                 @auth('web')
-
                     <li>
                         <a href="{{route('front.transactions')}}" class="waves-effect">
                             <i class="fa fa-money"></i>
@@ -31,12 +36,12 @@
                     </li>
 
                     <li>
-                        <a href="{{route('front.orders','ALL')}}" class="waves-effect">
+                        <a href="{{route('front.orders', 'ALL')}}" class="waves-effect">
                             <i class="fa fa-truck"></i>
                             <span key="t-index">@lang('translation.myOrders')</span>
                         </a>
                     </li>
-                                        <li>
+                    <li>
                         <a href="{{route('front.finance.user-index')}}">
                             <i class="fa fa-id-card"></i>
                             <span key="t-dashboards">الصادر والوارد</span>
@@ -69,7 +74,7 @@
             <div class="alert-wrap mt-3 mr-2 ml-2">
                 <div class="alert alert-success">
                     <strong class="pull-right">@lang('translation.Technical Support') : </strong>
-                    <a href="{{setting('whatsup')}}" target="_blank"style="margin: 0px 5px;font-size: 18px;">
+                    <a href="{{setting('whatsup')}}" target="_blank" style="margin: 0px 5px;font-size: 18px;">
                         <i class="fa fa-whatsapp text-success pull-left" style="font-size:1.3em;"></i>
                     </a>
                     <a href="{{setting('telegram')}}" target="_blank" style="margin: 0px 5px;font-size: 18px;">

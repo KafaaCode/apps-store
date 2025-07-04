@@ -20,22 +20,22 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends=['level'];
+    protected $appends = ['level'];
 
 
-    public  function getLevelAttribute()
+    public function getLevelAttribute()
     {
-       $Level=  Level::where('amount','<=',$this->amount_orders)
-            ->orderBy('sort','DESC')->first();
+        $Level = Level::where('amount', '<=', $this->amount_orders)
+            ->orderBy('sort', 'DESC')->first();
 
-        return $Level?:Level::orderBy('sort')->first();
+        return $Level ?: Level::orderBy('sort')->first();
     }
 
     public function transactions()
     {
         return $this->hasMany(Transaction::class, 'user_id');
     }
-//    public  function getMyBalanceAttribute()
+    //    public  function getMyBalanceAttribute()
 //    {
 //       return $this->transactions()->where('status','approved')->sum('final_total') - $this->amount_orders ;
 //    }
@@ -43,13 +43,15 @@ class User extends Authenticatable
 
     public function status()
     {
-        return $this->is_active =='1'?'Active':'Inactive' ;
+        return $this->is_active == '1' ? 'Active' : 'Inactive';
     }
-    public function country() {
-    	return $this->belongsTo(Country::class,'country_id');
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id');
     }
-    public function city() {
-    	return $this->belongsTo(City::class);
+    public function city()
+    {
+        return $this->belongsTo(City::class);
     }
     public function currency()
     {
@@ -81,4 +83,16 @@ class User extends Authenticatable
         return $this->level ? $this->level->profit_percentage : 0;
     }
 
+    public function vip()
+    {
+        return $this->hasOne(Vip::class);
+    }
+
+    public function isVipActive()
+    {
+        if (!$this->vip)
+            return false;
+
+        return now()->between($this->vip->start_at, $this->vip->end_at);
+    }
 }

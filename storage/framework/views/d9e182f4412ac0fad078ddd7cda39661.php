@@ -14,9 +14,14 @@
                         <span key="t-index"><?php echo app('translator')->get('translation.index'); ?></span>
                     </a>
                 </li>
+                <li>
+                    <a href="<?php echo e(route('front.vip')); ?>" class="waves-effect">
+                        <i class="fas fa-crown"></i>
+                        <span key="t-index">VIP</span>
+                    </a>
+                </li>
 
                 <?php if(auth()->guard('web')->check()): ?>
-
                     <li>
                         <a href="<?php echo e(route('front.transactions')); ?>" class="waves-effect">
                             <i class="fa fa-money"></i>
@@ -31,12 +36,12 @@
                     </li>
 
                     <li>
-                        <a href="<?php echo e(route('front.orders','ALL')); ?>" class="waves-effect">
+                        <a href="<?php echo e(route('front.orders', 'ALL')); ?>" class="waves-effect">
                             <i class="fa fa-truck"></i>
                             <span key="t-index"><?php echo app('translator')->get('translation.myOrders'); ?></span>
                         </a>
                     </li>
-                                        <li>
+                    <li>
                         <a href="<?php echo e(route('front.finance.user-index')); ?>">
                             <i class="fa fa-id-card"></i>
                             <span key="t-dashboards">الصادر والوارد</span>
@@ -69,7 +74,7 @@
             <div class="alert-wrap mt-3 mr-2 ml-2">
                 <div class="alert alert-success">
                     <strong class="pull-right"><?php echo app('translator')->get('translation.Technical Support'); ?> : </strong>
-                    <a href="<?php echo e(setting('whatsup')); ?>" target="_blank"style="margin: 0px 5px;font-size: 18px;">
+                    <a href="<?php echo e(setting('whatsup')); ?>" target="_blank" style="margin: 0px 5px;font-size: 18px;">
                         <i class="fa fa-whatsapp text-success pull-left" style="font-size:1.3em;"></i>
                     </a>
                     <a href="<?php echo e(setting('telegram')); ?>" target="_blank" style="margin: 0px 5px;font-size: 18px;">
@@ -82,5 +87,4 @@
         <!-- Sidebar -->
     </div>
 </div>
-<!-- Left Sidebar End -->
-<?php /**PATH D:\Personal\Freelancer\Asmar Market\public_html_downlaod\resources\views/front/layouts/sidebar.blade.php ENDPATH**/ ?>
+<!-- Left Sidebar End --><?php /**PATH D:\Personal\Freelancer\Asmar Market\public_html_downlaod\resources\views/front/layouts/sidebar.blade.php ENDPATH**/ ?>

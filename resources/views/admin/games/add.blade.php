@@ -112,7 +112,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>صورة المنتج</label>
-                                <input type="file" name="image" class="form-control">
+                                <input type="file" name="image" class="form-control" required>
                                 @error('image')<span class="text-danger">{{ $message }}</span>@enderror
                             </div>
                             @isset($bank->image)

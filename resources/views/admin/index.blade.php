@@ -84,6 +84,22 @@
             </div>
         </div>
 
+        {{-- اشتراكات VIP --}}
+        <div class="col-xl-3 col-md-6 mb-4">
+            <a href="{{ route('ad.vip.packages') }}" class="text-decoration-none">
+                <div class="card border-start border-danger border-3 shadow">
+                    <div class="card-body d-flex align-items-center justify-content-center gap-3">
+                        <i class="fas fa-crown fa-3x text-danger"></i>
+                        <div>
+                            <h5 class="card-title mb-2">اشتراكات VIP</h5>
+                            <h2 class="text-danger">{{ $stats['vip_subscriptions'] }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
         {{-- رصيد المستخدمين الإجمالي --}}
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-start border-primary border-3 shadow">

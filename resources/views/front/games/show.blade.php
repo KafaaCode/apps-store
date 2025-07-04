@@ -419,15 +419,77 @@
         </form>
         <div class="row mt-3">
             @auth()
+            @if ((auth()->user()->vip == null || auth()->user()->vip == false ))
+                @if(auth()->user()->isVipActive())
+                    <button type="submit" 
+                        class="btn btn-primary btn-block checkout w-50 m-auto"
+                        id="submit"
+                        onclick="this.disabled=true;document.getElementById('neworder').submit()" disabled>
+                        {{__('translation.add')}}
+                    </button>
+                @else
+                <span class="text-center mb-2 bg-danger text-white p-2">لست مشترك في قسم VIP....</span>
+                <!-- زر فتح المودال -->
+                <button type="button"
+                    class="btn btn-primary btn-block checkout w-50 m-auto"
+                    data-bs-toggle="modal"
+                    data-bs-target="#confirmModal"
+                    id="submit">
+                    اضافة اشتراك VIP
+                </button>
+                @endif
+            @else
+            vip
                 <button type="submit" 
                         class="btn btn-primary btn-block checkout w-50 m-auto"
                         id="submit"
                         onclick="this.disabled=true;document.getElementById('neworder').submit()">
                     {{__('translation.add')}}
                 </button>
+            @endif
             @endauth
         </div>
     </div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <form action="{{ route('vips.store') }}" method="POST" id="vipForm">
+        @csrf
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmModalLabel">اشتراك في قسم VIP</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+        </div>
+
+        <div class="modal-body">
+          <p>اختر باقة الاشتراك المناسبة:</p>
+
+          <div class="mb-3">
+            <label for="package" class="form-label">الباقة</label>
+            <select name="package_id" class="form-select" required>
+              <option value="">اختر الباقة</option>
+              @foreach ($vipPackages as $package)
+                <option value="{{ $package->id }}">
+                  {{ $package->title }} ({{ $package->price }} $ / {{ $package->duration_days }} يوم)
+                </option>
+              @endforeach
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+          <button type="submit" class="btn btn-primary">تأكيد الاشتراك</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
 @endsection
 
 @section('script')

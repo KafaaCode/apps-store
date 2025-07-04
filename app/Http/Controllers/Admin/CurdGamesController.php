@@ -56,9 +56,15 @@ class CurdGamesController extends Controller
 
     public function index()
     {
-        $games = Game::latest()->paginate(10);
+        $games = Game::where(function ($query) {
+            $query->where('vip', false)
+                ->orWhereNull('vip');
+        })->latest()->paginate(10);
+
         return view('admin.games.index', compact('games'));
     }
+
+
     public function create()
     {
         $categories = Category::all();
@@ -129,6 +135,11 @@ class CurdGamesController extends Controller
 
 
             DB::commit();
+            if (!($game->vip == null || $game->vip == false)) {
+                return redirect()
+                    ->route('ad.vip')
+                    ->with('success', 'Game created successfully.');
+            }
             return redirect()
                 ->route('ad.games.index')
                 ->with('success', 'Game created successfully.');
