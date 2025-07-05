@@ -73,7 +73,6 @@ class GameController extends Controller
     {
         DB::beginTransaction();
 
-        // dd($request->all());
         try {
             $randomNumber = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
             $user_id = auth()->id();
