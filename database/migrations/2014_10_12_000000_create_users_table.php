@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->decimal('user_balance')->default(0);
             $table->text('avatar')->nullable();
+            $table->string('api_token', 80)->unique()->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
