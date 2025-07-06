@@ -18,6 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('api.token')->group(function () {
     Route::post('/profile', [App\Http\Controllers\Api\ApiController::class, 'profile']);
     Route::post('/order', [App\Http\Controllers\Api\ApiController::class, 'store']);
-    Route::post('/order/{id}', [App\Http\Controllers\Api\ApiController::class, 'orderShow']);
+    Route::post('/check/order', [App\Http\Controllers\Api\ApiController::class, 'orderShow']);
     Route::post('/products', [App\Http\Controllers\Api\ApiController::class, 'products']);
 });
