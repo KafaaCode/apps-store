@@ -10,17 +10,20 @@ use App\Models\Game;
 use App\Models\Order;
 use App\Models\Package;
 use App\Models\Provider;
+use App\Models\Currency;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Front\ProvidersController;
 
 class ApiController extends Controller
 {
     public function profile(Request $request)
     {
+        $code = Currency::find($request->user()->currency_id)->code ?? 'USD';
         return response()->json([
             'success' => true,
             'email' => $request->user()->email,
             'balance' => $request->user()->user_balance,
-            'currency' => $request->user()->currency->code,
+            'currency' => $code,
         ]);
     }
 
@@ -37,7 +40,7 @@ class ApiController extends Controller
         DB::beginTransaction();
 
         try {
-            $randomNumber = str_pad(rand(0, 9999), 4, '0', STR_PAD_LEFT);
+            $randomNumber = str_pad(rand(0, 9999999), 7, '0', STR_PAD_LEFT);
             $user_id = $request->user()->id;
             $invoice_no = 'ZM' . $randomNumber . $user_id;
             $game = Game::where('id', $request->game_id)->first();
