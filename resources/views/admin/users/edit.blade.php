@@ -201,6 +201,32 @@
                         <div class="form-group mt-5">
                             <button type="submit" class="btn btn-primary"><i class="fa fa-edit"></i>@lang('Edit')</button>
                         </div>
+                        <hr>
+                        <div class="form-group mt-4 text-center">
+                            <label class="fw-bold">API Token</label>
+                            <div class="input-group mb-3" style="max-width: 500px; margin: 0 auto;">
+                                <input type="text" id="apiTokenInput" class="form-control text-center bg-light" value="{{ $user->api_token }}" readonly>
+                                <button class="btn btn-outline-secondary" type="button" id="copyApiTokenBtn">
+                                    <i class="fa fa-copy"></i> نسخ
+                                </button>
+                            </div>
+                            <small class="text-muted">استخدم هذا التوكن للوصول إلى واجهات برمجة التطبيقات الخاصة بك.</small>
+                        </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const btn = document.getElementById('copyApiTokenBtn');
+                                const input = document.getElementById('apiTokenInput');
+                                btn.addEventListener('click', function() {
+                                    input.select();
+                                    input.setSelectionRange(0, 99999);
+                                    document.execCommand('copy');
+                                    btn.innerHTML = '<i class="fa fa-check"></i> تم النسخ';
+                                    setTimeout(() => {
+                                        btn.innerHTML = '<i class="fa fa-copy"></i> نسخ';
+                                    }, 1500);
+                                });
+                            });
+                        </script>
                     </form>
                 </div>
             </div>
