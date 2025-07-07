@@ -97,6 +97,7 @@ Route::get('/dashboard', function () {
     // Update controller from ProviderController to CurdGamesController
     Route::get('games/fetch-products', [CurdGamesController::class, 'fetchProducts'])->name('games.fetch-products');
     Route::resource('games', CurdGamesController::class);
+    Route::post('/games/{game}/toggle-api', [CurdGamesController::class, 'toggleApi'])->name('ad.games.toggle-api');
     Route::get('games/packages/{id}', [CurdGamesController::class, 'packages'])->name('games.packages');
     Route::post('games/packages/update/{id}', [CurdGamesController::class, 'packagesUpdate'])->name('games.packages.update');
     Route::delete('games/packages/delete/{id}', [CurdGamesController::class, 'packagesDestroy'])->name('games.packages.delete');

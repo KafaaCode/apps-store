@@ -358,6 +358,258 @@
                         </div>
 
                         <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <div class="form-check" >
+                                        <input class="form-check-input" type="checkbox"  id="need_id_player"  @if($game->need_id_player) checked @endif name="need_id_player" value="1" >
+
+                                        <label class="form-check-label" for="need_id_player" >
+                                            @lang('translation.need_id_player')
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <div class="form-check" >
+                                        <input class="form-check-input" type="checkbox"  id="need_name_player" name="need_name_player"   @if($game->need_name_player) checked @endif value="1" >
+
+                                        <label class="form-check-label" for="need_name_player">
+                                            @lang('translation.need_name_player')
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="last_row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <div class="form-check " >
+                                        <input class="form-check-input" type="checkbox"   @if($game->have_packages) checked @endif  id="background_package" name="have_packages" value="1" >
+
+                                        <label class="form-check-label" for="background_package">
+                                            @lang('translation.have_packages')
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row"   @if(!$game->have_packages) style="display: none" @endif  id="btn_add">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="validationCustom02" class="form-label">  @lang('translation.background_package')</label>
+                                    <input type="file" class="form-control" id="validationCustom02" placeholder="background package"
+                                            name="background_package">
+                                    @if($game->getFirstMediaUrl('background_package'))
+                                        <div class="img-old">
+                                            <img src="{{$game->getFirstMediaUrl('background_package')}}" >
+                                        </div>
+                                    @endif
+                                    <div class="valid-feedback">
+                                        @lang('translation.validBackground_package')
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        @lang('translation.validBackground_package')
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-2">
+                                <a class="btn btn-outline-success float-end"  id="add_row">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-12 row " id="div-append">
+                                @if($game->have_packages)
+                                    @foreach($game->packages as $package)
+                                        <div class="row">
+                                            <input type="hidden" name="old_packages[]"  value="{{$package->id}}">
+                                            <div class="col-md-2">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom02" class="form-label">  @lang('translation.price_qty')</label>
+                                                    <input type="number" class="form-control" id="validationCustom02"
+                                                           required name="price_qty_package[]" step="any" value="{{$package->price}}">
+                                                    <div class="valid-feedback">
+                                                        @lang('translation.validPrice_qty')
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom02" class="form-label">  @lang('translation.quantity')</label>
+                                                    <input type="number" class="form-control" id="validationCustom02"
+                                                           required name="quantity_package[]"  value="{{$package->quantity}}">
+                                                    <div class="valid-feedback">
+                                                        @lang('translation.validQuantity')
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        @lang('translation.invalidQuantity').
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom03" class="form-label">@lang('translation.Status')</label>
+                                                    <select class="form-select" id="validationCustom03" required name="is_active_package[]">
+                                                        <option  disabled > @lang('translation.Choose')</option>
+                                                        <option value="1" @if($package->is_active) selected @endif >@lang('translation.active')</option>
+                                                        <option value="0"@if(!$package->is_active)selected  @endif >@lang('translation.unactive')</option>
+                                                    </select>
+                                                    <div class="valid-feedback">
+                                                        @lang('translation.validStatus')
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        @lang('translation.invalidStatus')
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <a class="btn btn-outline-danger"
+                                                   id="delete_row">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </div>
+                                            <hr class="hr-add">
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <div class="form-check" >
+                                        <input class="form-check-input" type="checkbox"  id="need_id_player"  @if($game->need_id_player) checked @endif name="need_id_player" value="1" >
+
+                                        <label class="form-check-label" for="need_id_player" >
+                                            @lang('translation.need_id_player')
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <div class="form-check" >
+                                        <input class="form-check-input" type="checkbox"  id="need_name_player" name="need_name_player"   @if($game->need_name_player) checked @endif value="1" >
+
+                                        <label class="form-check-label" for="need_name_player">
+                                            @lang('translation.need_name_player')
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" id="last_row">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <div class="form-check " >
+                                        <input class="form-check-input" type="checkbox"   @if($game->have_packages) checked @endif  id="background_package" name="have_packages" value="1" >
+
+                                        <label class="form-check-label" for="background_package">
+                                            @lang('translation.have_packages')
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row"   @if(!$game->have_packages) style="display: none" @endif  id="btn_add">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="validationCustom02" class="form-label">  @lang('translation.background_package')</label>
+                                    <input type="file" class="form-control" id="validationCustom02" placeholder="background package"
+                                            name="background_package">
+                                    @if($game->getFirstMediaUrl('background_package'))
+                                        <div class="img-old">
+                                            <img src="{{$game->getFirstMediaUrl('background_package')}}" >
+                                        </div>
+                                    @endif
+                                    <div class="valid-feedback">
+                                        @lang('translation.validBackground_package')
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        @lang('translation.validBackground_package')
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-2">
+                                <a class="btn btn-outline-success float-end"  id="add_row">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            </div>
+                            <div class="col-md-12 row " id="div-append">
+                                @if($game->have_packages)
+                                    @foreach($game->packages as $package)
+                                        <div class="row">
+                                            <input type="hidden" name="old_packages[]"  value="{{$package->id}}">
+                                            <div class="col-md-2">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom02" class="form-label">  @lang('translation.price_qty')</label>
+                                                    <input type="number" class="form-control" id="validationCustom02"
+                                                           required name="price_qty_package[]" step="any" value="{{$package->price}}">
+                                                    <div class="valid-feedback">
+                                                        @lang('translation.validPrice_qty')
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom02" class="form-label">  @lang('translation.quantity')</label>
+                                                    <input type="number" class="form-control" id="validationCustom02"
+                                                           required name="quantity_package[]"  value="{{$package->quantity}}">
+                                                    <div class="valid-feedback">
+                                                        @lang('translation.validQuantity')
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        @lang('translation.invalidQuantity').
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="mb-3">
+                                                    <label for="validationCustom03" class="form-label">@lang('translation.Status')</label>
+                                                    <select class="form-select" id="validationCustom03" required name="is_active_package[]">
+                                                        <option  disabled > @lang('translation.Choose')</option>
+                                                        <option value="1" @if($package->is_active) selected @endif >@lang('translation.active')</option>
+                                                        <option value="0"@if(!$package->is_active)selected  @endif >@lang('translation.unactive')</option>
+                                                    </select>
+                                                    <div class="valid-feedback">
+                                                        @lang('translation.validStatus')
+                                                    </div>
+                                                    <div class="invalid-feedback">
+                                                        @lang('translation.invalidStatus')
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <a class="btn btn-outline-danger"
+                                                   id="delete_row">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </div>
+                                            <hr class="hr-add">
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-xl-12">
                                 <div class="card">
                                     <div class="card-body">
@@ -588,29 +840,3 @@
         });
     </script>
 @endsection
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
