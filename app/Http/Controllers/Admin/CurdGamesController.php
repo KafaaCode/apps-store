@@ -57,8 +57,10 @@ class CurdGamesController extends Controller
     public function index()
     {
         $games = Game::latest()->paginate(10);
-        return view('admin.games.index', compact('games'));
+        $providers = \App\Models\Provider::where('is_active', 1)->get();
+        return view('admin.games.index', compact('games', 'providers'));
     }
+
     public function create()
     {
         $categories = Category::all();
@@ -155,10 +157,7 @@ class CurdGamesController extends Controller
             'background_package',
             'old_packages',
             'icon_coins',
-            // استثناء حقول الموفر
-            'provider_type',
-            'provider_id',
-            'provider_game_id',
+            // حذف استثناء حقول الموفر
         ]);
 
         // dd($data);
@@ -174,16 +173,6 @@ class CurdGamesController extends Controller
         }
 
         $game = Game::findorFail($id);
-        $type = $request->provider_type;
-
-        // dd($type);
-        if ($type === 'auto') {
-            $game->provider_id = $request->provider_id;
-            $game->provider_game_id = $request->provider_game_id;
-        } else {
-            $game->provider_id = null;
-            $game->provider_game_id = null;
-        }
 
         DB::beginTransaction();
         try {
@@ -379,5 +368,30 @@ class CurdGamesController extends Controller
         return redirect()
             ->back()
             ->with('success', 'Game package deleted successfully.');
+    }
+
+    public function toggleApi(Request $request, $gameId)
+    {
+        $game = \App\Models\Game::findOrFail($gameId);
+        // إذا كان مفعل (auto) يتم تعطيله والعكس
+        if ($game->provider_id) {
+            $game->provider_id = null;
+            $game->provider_game_id = null;
+        } else {
+            $providerId = $request->input('provider_id');
+            $providerGameId = $request->input('provider_game_id');
+            if (!$providerId || !$providerGameId) {
+                return response()->json(['success' => false, 'message' => 'يجب اختيار مزود وربطه بمنتج.'], 422);
+            }
+            $game->provider_id = $providerId;
+            $game->provider_game_id = $providerGameId;
+        }
+        $game->save();
+        return response()->json([
+            'success' => true,
+            'status' => $game->provider_id ? 'مفعل' : 'غير مفعل',
+            'provider_id' => $game->provider_id,
+            'provider_game_id' => $game->provider_game_id,
+        ]);
     }
 }
